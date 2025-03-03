@@ -96,7 +96,16 @@ img.market {
     height: 50%;
     width: 50%;
   }
-  
+
+img.browsers{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 1%;
+    padding-bottom: 0%;
+    height: auto;
+    width: 100%;
+}
   
 .container {
     display: grid;
