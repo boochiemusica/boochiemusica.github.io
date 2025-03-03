@@ -1,7 +1,6 @@
 .myheader {
-    background-color: azure;
-    margin-top: 70px;
-    margin-bottom: 70px;
-    margin-left: 70px;
-    margin-right: 70px;
+    background-color: lightblue;
+  color: black;
+  padding: 40px;
+  text-align: center;
 }
