@@ -119,3 +119,29 @@ img.browsers{
     padding: 10px;
     font-size: 30px;
   }
+
+  #quiz {
+    max-width: 50px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: blanchedalmond;
+    border-radius: 5px;
+  }
+
+  #question {
+    margin-bottom: 20px;
+  }
+
+  #options {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
