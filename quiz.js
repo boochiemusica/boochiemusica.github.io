@@ -1,105 +1,71 @@
 
-function buildQuiz(){
-    // variable to store the HTML output
-    const output = [];
-  
-    // for each question...
-    myQuestions.forEach(
-      (currentQuestion, questionNumber) => {
-  
-        // variable to store the list of possible answers
-        const answers = [];
-  
-        // and for each available answer...
-        for(letter in currentQuestion.answers){
-  
-          // ...add an HTML radio button
-          answers.push(
-            `<label>
-              <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-            </label>`
-          );
-        }
-  
-        // add this question and its answers to the output
-        output.push(
-          `<div class="question"> ${currentQuestion.question} </div>
-          <div class="answers"> ${answers.join('')} </div>`
-        );
-      }
-    );  
+const surveyJson = {
+  title: "American History",
+  showProgressBar: true,
+  progressBarLocation: "bottom",
+  showTimer: true,
+  timeLimitPerPage: 10,
+  timeLimit: 25,
+  firstPageIsStartPage: true,
+  startSurveyText: "Start Quiz",
+  pages: [{
+      elements: [{
+          type: "html",
+          html: "You are about to start a quiz on American history. <br>You will have 10 seconds for every question and 25 seconds to end the quiz.<br>Enter your name below and click <b>Start Quiz</b> to begin."
+      }, {
+          type: "text",
+          name: "username",
+          titleLocation: "hidden",
+          isRequired: true
+      }]
+  }, {
+      elements: [{
+          type: "radiogroup",
+          name: "civilwar",
+          title: "When was the American Civil War?",
+          choices: [
+              "1796-1803", "1810-1814", "1861-1865", "1939-1945"
+          ],
+          correctAnswer: "1861-1865"
+      }]
+  }, {
+      elements: [{
+          type: "radiogroup",
+          name: "libertyordeath",
+          title: "Whose quote is this: \"Give me liberty, or give me death\"?",
+          choicesOrder: "random",
+          choices: [
+              "John Hancock", "James Madison", "Patrick Henry", "Samuel Adams"
+          ],
+          correctAnswer: "Patrick Henry"
+      }]
+  }, {
+      elements: [{
+          type: "radiogroup",
+          name: "magnacarta",
+          title: "What is Magna Carta?",
+          choicesOrder: "random",
+          choices: [
+              "The foundation of the British parliamentary system",
+              "The Great Seal of the monarchs of England",
+              "The French Declaration of the Rights of Man",
+              "The charter signed by the Pilgrims on the Mayflower"
+          ],
+          correctAnswer: "The foundation of the British parliamentary system"
+      }]
+  }],
+  completedHtml: "<h4>You got <b>{correctAnswers}</b> out of <b>{questionCount}</b> correct answers.</h4>",
+  completedHtmlOnCondition: [{
+      expression: "{correctAnswers} == 0",
+      html: "<h4>Unfortunately, none of your answers are correct. Please try again.</h4>"
+  }, {
+      expression: "{correctAnswers} == {questionCount}",
+      html: "<h4>Congratulations! You answered all the questions correctly!</h4>"
+  }]
+};
 
-}
-function showResults(){
+const survey = new Survey.Model(surveyJson);
 
-  // gather answer containers from our quiz
-  const answerContainers = quizContainer.querySelectorAll('.answers');
-
-  // keep track of user's answers
-  let numCorrect = 0;
-
-  // for each question...
-  myQuestions.forEach( (currentQuestion, questionNumber) => {
-
-    // find selected answer
-    const answerContainer = answerContainers[questionNumber];
-    const selector = `input[name=question${questionNumber}]:checked`;
-    const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-
-    // if answer is correct
-    if(userAnswer === currentQuestion.correctAnswer){
-      // add to the number of correct answers
-      numCorrect++;
-
-      // color the answers green
-      answerContainers[questionNumber].style.color = 'lightgreen';
-    }
-    // if answer is wrong or blank
-    else{
-      // color the answers red
-      answerContainers[questionNumber].style.color = 'red';
-    }
-  });
-
-  // show number of correct answers out of total
-  resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
-}
-
-const quizContainer = document.getElementById('quiz');
-const resultsContainer = document.getElementById('results');
-const submitButton = document.getElementById('submit');
-const myQuestions = [
-    {
-      question: "Who invented JavaScript?",
-      answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
-    },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
-    }
-  ];
-
-buildQuiz();
-submitButton.addEventListener('click', showResults);
+document.addEventListener("DOMContentLoaded", function() {
+  survey.render(document.getElementById("surveyContainer"));
+});
